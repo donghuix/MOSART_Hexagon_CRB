@@ -7,33 +7,17 @@ re = 6.37122e6;
 
 check_flow_network = 0;
 
-res = 'half';
-if strcmp(res,'half')
-    tag = 'case20210322014';
-    mosart_gridded_surfdata_filename = '/Users/xudo627/projects/cesm-inputdata/MOSART_Global_half_20200221.nc';
-    mosart_usrdat_name = ['columbia_half_hexagon_' tag];
-elseif strcmp(res,'4th')
-    tag = '/Users/xudo627/projects/Columbia_river_Basin/hexagon/case11/';
-    mosart_gridded_surfdata_filename = '/Users/xudo627/projects/cesm-inputdata/MOSART_NLDAS_8th_20160426.nc';
-    mosart_usrdat_name = ['columbia_4th_hexagon_' tag];
-elseif strcmp(res,'8th')
-    tag = '/Users/xudo627/projects/Columbia_river_Basin/hexagon/case15/';
-    mosart_gridded_surfdata_filename = '/Users/xudo627/projects/cesm-inputdata/MOSART_NLDAS_8th_20160426.nc';
-    mosart_usrdat_name = ['columbia_8th_hexagon_' tag];
-elseif strcmp(res,'16th')
-    tag = '/Users/xudo627/projects/Columbia_river_Basin/hexagon/case20201015004/';
-    mosart_gridded_surfdata_filename = '/Users/xudo627/projects/cesm-inputdata/MOSART_NLDAS_8th_20160426.nc';
-    mosart_usrdat_name = ['columbia_16th_hexagon_' tag];
-else
-    fprintf(['Resolution ' res ' not available!!!\n']);
-end
-hexfile = [tag '/hexwatershed.nc'];
+scenario = 'TBSB';
+%mosart_gridded_surfdata_filename = '/Users/xudo627/projects/cesm-inputdata/MOSART_Global_half_20200221.nc';
+mosart_gridded_surfdata_filename = '../inputdata/MOSART_columbia_half_square_c201016.nc';
+mosart_usrdat_name = ['columbia_half_hexagon_' scenario];
+hexfile = ['../' scenario '/hexwatershed.nc'];
 x    = ncread(hexfile,'X');
 y    = ncread(hexfile,'Y');
 ID   = ncread(hexfile,'GlobalID');
 dnID = ncread(hexfile,'GlobalID_down');
 slopew  = ncread(hexfile,'SlopeW');   % [%]
-rlength = ncread(hexfile,'Length'); % [m]
+rlength = ncread(hexfile,'Length');   % [m]
 
 slopew = slopew ./ 100; % convert from [%] to [m/m]
 
@@ -131,7 +115,7 @@ end
 areatotal = areatotal.*mean(aream2);
 ioutlet = find(areatotal == max(areatotal));
 
-out_netcdf_dir = './inputdata';
+out_netcdf_dir = '../inputdata';
 if ~exist(out_netcdf_dir,'dir')
     mkdir(out_netcdf_dir);
 end
