@@ -67,18 +67,29 @@ subplot(4,3,12);
 patch(xv_tbsb,yv_tbsb,rdep_tbsb); axis equal;colorbar;%caxis([0 2e5]);
 
 figure;
-nbins1 = 20;
-nbins2 = 40;
-subplot(1,2,1);
-histogram(rlen_rbsb,nbins1); hold on;
-histogram(rlen_tbsb,nbins1);
-histogram(rlen,nbins2);
+nbins = 40;
+subplot(3,2,1);
+histogram(rlen_rbsb,nbins); hold on;
+histogram(rlen_tbsb,nbins);
+histogram(rlen,nbins);
 title('length','FontSize',15,'FontWeight','bold');
-subplot(1,2,2);
-histogram(rslp_rbsb,nbins1); hold on;
-histogram(rslp_tbsb,nbins1);
-histogram(rslp,nbins2);
+subplot(3,2,2);
+histogram(rslp_rbsb,nbins); hold on;
+histogram(rslp_tbsb,nbins);
+histogram(rslp,nbins);
 title('slope','FontSize',15,'FontWeight','bold');
+subplot(3,2,3);
+
+title('TBSB length','FontSize',15,'FontWeight','bold');
+subplot(3,2,4);
+
+title('TBSB slope','FontSize',15,'FontWeight','bold');
+subplot(3,2,5);
+
+title('DRT length','FontSize',15,'FontWeight','bold');
+subplot(3,2,6);
+
+title('DRT slope','FontSize',15,'FontWeight','bold');
 
 
 % verify shapefile and netcdf file for slope
