@@ -7,7 +7,7 @@ re = 6.37122e6;
 
 check_flow_network = 0;
 
-scenario = 'TBSB';
+scenario = 'RBSB';
 %mosart_gridded_surfdata_filename = '/Users/xudo627/projects/cesm-inputdata/MOSART_Global_half_20200221.nc';
 mosart_gridded_surfdata_filename = '../inputdata/MOSART_columbia_half_square_c201016.nc';
 mosart_usrdat_name = ['columbia_half_hexagon_' scenario];
