@@ -7,7 +7,7 @@ re = 6.37122e6;
 
 check_flow_network = 0;
 
-scenario = 'RBSB';
+scenario = 'TBSB';
 %mosart_gridded_surfdata_filename = '/Users/xudo627/projects/cesm-inputdata/MOSART_Global_half_20200221.nc';
 mosart_gridded_surfdata_filename = '../inputdata/MOSART_columbia_half_square_c201016.nc';
 mosart_usrdat_name = ['columbia_half_hexagon_' scenario];
@@ -18,6 +18,8 @@ ID   = ncread(hexfile,'GlobalID');
 dnID = ncread(hexfile,'GlobalID_down');
 slopew  = ncread(hexfile,'SlopeW');   % [%]
 rlength = ncread(hexfile,'Length');   % [m]
+rdep    = ncread(hexfile,'Depth');
+rwid    = ncread(hexfile,'Width');
 
 slopew = slopew ./ 100; % convert from [%] to [m/m]
 
@@ -132,7 +134,9 @@ user_defined_vars(1).rslp   = slopew;
 user_defined_vars(1).tslp   = slopew;
 user_defined_vars(1).rlen   = rlength;
 user_defined_vars(1).areaTotal2 = areatotal;
-
+user_defined_vars(1).rdep   = rdep;
+user_defined_vars(1).rwid   = rwid;
+user_defined_vars(1).rwid0  = 5.*rwid;
 
 fname_out = CreateMOSARTUgridInputForE3SM3(     ...
             mosart_gridded_surfdata_filename,   ...
