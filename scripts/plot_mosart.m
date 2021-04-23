@@ -39,9 +39,13 @@ corr = [45.63333333	-121.9544444; ...
         45.6075	    -121.1722;    ... 
         45.7522	    -121.5258;    ...
         45.24166667	-121.0938889; ...
-        46.0278	    -118.7286];
+        46.0278	    -118.7286;    ...
+        42.7675	-112.8794444;     ...
+        46.6289	-119.8636;        ...
+        46.25055556	-118.8819444];
 ID = {'BON','HOD','JDA','KLC','MCN', ...
-      'PEL','ROU','TDA','WHS','WHT','WWA'}; 
+      'PEL','ROU','TDA','WHS','WHT', ...
+      'WWA','AMFI','PRD','IHR'}; % TDA: 237000 PRD:96000  IHR: 108500*2.59e+6 sq mi
 
 T = readtable('/Users/xudo627/projects/Columbia_River_Basin/BPA_NRNI_flow/NRNI_Flows_1929-2008_Corrected_04-2017.csv','HeaderLines',1);
 time = datenum(T.Var2(6:end));
@@ -60,10 +64,26 @@ for i = 1979 : 2008
 end
 [yr_sim,mo_sim] = datevec(t_sim);
 
+xc1 = ncread('../inputdata/domain_lnd_columbia_half_hexagon_RBSB_c210406.nc','xc');
+yc1 = ncread('../inputdata/domain_lnd_columbia_half_hexagon_RBSB_c210406.nc','yc');
+xc2 = ncread('../inputdata/domain_lnd_columbia_half_hexagon_TBSB_c210406.nc','xc');
+yc2 = ncread('../inputdata/domain_lnd_columbia_half_hexagon_TBSB_c210406.nc','yc');
+xc3 = ncread('../inputdata/domain_lnd_columbia_half_square_c201016.nc','xc');
+yc3 = ncread('../inputdata/domain_lnd_columbia_half_square_c201016.nc','yc');
+
 isub = 1;
 figure(1); set(gcf,'Position',[10 10 1400 400]);
 figure(2); set(gcf,'Position',[10 10 1400 400]);
 for iGauge = 8%1 : length(ID)
+    if iGauge == 14
+        area_gauge = 108500*2.59e+6;
+    elseif iGauge == 13
+        area_gauge = 96000*2.59e+6;
+    elseif iGauge == 8
+        area_gauge = 237000*2.59e+6;
+    else
+        area_gauge = [];
+    end
     if isempty(find(strcmp(T.Properties.VariableNames,ID{iGauge})))
         ind(iGauge) = 0;
     else
@@ -85,10 +105,17 @@ for iGauge = 8%1 : length(ID)
             end
         end
         
-        [ioutlet1, icontributing1] = find_mosart_cell(fname1,corr(8,2),corr(8,1));
-        [ioutlet2, icontributing2] = find_mosart_cell(fname2,corr(8,2),corr(8,1));
-        [ioutlet3, icontributing3] = find_mosart_cell(fname3,corr(8,2),corr(8,1));
-
+        [ioutlet1, icontributing1] = find_mosart_cell(fname1,corr(iGauge,2),corr(iGauge,1),area_gauge);
+        [ioutlet2, icontributing2] = find_mosart_cell(fname2,corr(iGauge,2),corr(iGauge,1),area_gauge);
+        [ioutlet3, icontributing3] = find_mosart_cell(fname3,corr(iGauge,2),corr(iGauge,1),area_gauge);
+        
+        figure(100);
+        plot(xc1(icontributing1),yc1(icontributing1),'b.'); hold on;
+        plot(xc1(ioutlet1),yc1(ioutlet1),'bo'); hold on;
+        plot(xc2(icontributing2),yc2(icontributing2),'r.'); hold on;
+        plot(xc2(ioutlet2),yc2(ioutlet2),'r*'); hold on;
+        plot(xc3(icontributing3),yc3(icontributing3),'g.'); hold on;
+        plot(xc3(ioutlet3),yc3(ioutlet3),'g*'); hold on;
         %subplot(6,2,isub);
         figure(1);
         plot(t_mon,data_mon,'k-','LineWidth',2); hold on; grid on;
@@ -105,8 +132,14 @@ for iGauge = 8%1 : length(ID)
         leg = legend('NRNI Flows','RBSB','TBSB','DRT');
         leg.FontSize = 15;
         leg.FontWeight = 'bold';
+        ylabel('Discharge [m^{3}/s]','FontSize',15,'FontWeight','bold');
 
         set(gca,'FontSize',15);
+        if iGauge == 8
+            title('The Dalles (Lon: -121.17, Lat: 45.61)','FontSize',18,'FontWeight','bold');
+        else
+            title(ID{iGauge},'FontSize',15,'FontWeight','bold');
+        end
         
         figure(2);
         plot(1:12,nanmean(reshape(data_mon,[12,30]),2),'k-','LineWidth',2); hold on; grid on;
@@ -120,15 +153,14 @@ for iGauge = 8%1 : length(ID)
         leg = legend('NRNI Flows','RBSB','TBSB','DRT');
         leg.FontSize = 15;
         leg.FontWeight = 'bold';
+        ylabel('Discharge [m^{3}/s]','FontSize',15,'FontWeight','bold');
 
         set(gca,'FontSize',15);
-        
+        title(ID{iGauge},'FontSize',15,'FontWeight','bold');
     end
 
 end
 
-xc1 = ncread('../inputdata/domain_lnd_columbia_half_hexagon_RBSB_c210406.nc','xc');
-yc1 = ncread('../inputdata/domain_lnd_columbia_half_hexagon_RBSB_c210406.nc','yc');
 [gsim,gsim2] = search_GSIM_gauge(xc1,yc1,xc1(ioutlet1),yc1(ioutlet1),1);
 [lon_gsim,lat_gsim,S,yr_gsim,mo_gsim,da_gsim,mu_gsim,sd_gsim,cv_gsim] = ...
              get_GSIM_discharge(gsim,2);
@@ -168,6 +200,7 @@ xticklabels({'Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','
 leg = legend('USGS','RBSB','TBSB','DRT');
 leg.FontSize = 15;
 leg.FontWeight = 'bold';
+ylabel('Discharge [m^{3}/s]','FontSize',15,'FontWeight','bold');
 
 set(gca,'FontSize',15);
         
