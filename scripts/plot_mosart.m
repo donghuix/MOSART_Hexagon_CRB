@@ -204,66 +204,66 @@ ylabel('Discharge [m^{3}/s]','FontSize',15,'FontWeight','bold');
 
 set(gca,'FontSize',15);
         
-% xv  = ncread('inputdata/domain_lnd_columbia_half_hexagon_case20210322014_c210324.nc','xv');
-% yv  = ncread('inputdata/domain_lnd_columbia_half_hexagon_case20210322014_c210324.nc','yv');
-% xv2  = ncread('/Users/xudo627/projects/Columbia_River_Basin/domain_lnd_columbia_river_basin_half_c201016.nc','xv');
-% yv2  = ncread('/Users/xudo627/projects/Columbia_River_Basin/domain_lnd_columbia_river_basin_half_c201016.nc','yv');
-% % xv2 = ncread('../UQ_test/inputdata/domain_lnd_columbia_half_c200831.nc','xv');
-% % yv2 = ncread('../UQ_test/inputdata/domain_lnd_columbia_half_c200831.nc','yv');
-% figure; set(gcf,'Position',[10 10 1400 600]);
-% subplot(1,2,1);
-% patch(xv,yv,qhex); axis equal; colormap(flowcolor(256));
-% caxis([0 3000]);
-% % subplot(1,2,2);
-% % patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
-% % caxis([0 300]);
-% cl = colorbar('east');
-% cl.Position = cl.Position + [0.07 0 0 0];
-% 
-% subplot(1,2,2);
-% patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
-% caxis([0 3000]);
-% % subplot(1,2,2);
-% % patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
-% % caxis([0 300]);
-% cl = colorbar('east');
-% cl.Position = cl.Position + [0.07 0 0 0];
-% 
-% % 
-% % figure;
-% % patch(xv,yv,qhex); axis equal; colormap(flowcolor(256)); hold on;
-% % %patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
-% % plot(xc2,yc2,'r.');
-% % 
-% % figure; set(gcf,'Position',[10 10 1400 600]);
-% % subplot(1,2,1);
-% % patch(xv,yv,nanmean(rtot,2)); axis equal;
-% % caxis([0 100]);
-% % subplot(1,2,2);
-% % patch(xv2,yv2,nanmean(rtot2,2)); axis equal;
-% % caxis([0 100]);
-% % cl = colorbar('east');
-% % cl.Position = cl.Position + [0.07 0 0 0];
-% 
-% q1 = qsub+qsur;
-% q2 = mosart2.QSUB_LIQ + mosart2.QSUR_LIQ;
-% 
-% q1 = nanmean(q1); q1 = q1(:);
-% q2 = nanmean(q2); q2 = q2(:);
-% 
-% figure;
-% plot(q1(25:end),'r--','LineWidth',2); hold on;
-% plot(q2(1:end-24),'b-','LineWidth',2);
-% 
-% q1 = qsub+qsur;
-% q2 = mosart2.QSUB_LIQ + mosart2.QSUR_LIQ;
-% 
-% q1 = nanmean(q1(:,25:end),2);
-% q2 = nanmean(q2(:,:,1 : end-24),3);
-% 
-% figure;set(gcf,'Position',[10 10 1400 600]);
-% subplot(1,2,1);
-% patch(xv,yv,q1); axis equal; colormap(flowcolor(256)); colorbar; caxis([0 120])
-% subplot(1,2,2);
-% patch(xv2,yv2,q2); axis equal; colormap(flowcolor(256)); colorbar; caxis([0 120])
+xv  = ncread('../inputdata/domain_lnd_columbia_half_hexagon_case20210322014_c210324.nc','xv');
+yv  = ncread('../inputdata/domain_lnd_columbia_half_hexagon_case20210322014_c210324.nc','yv');
+xv2  = ncread('/Users/xudo627/projects/Columbia_River_Basin/domain_lnd_columbia_river_basin_half_c201016.nc','xv');
+yv2  = ncread('/Users/xudo627/projects/Columbia_River_Basin/domain_lnd_columbia_river_basin_half_c201016.nc','yv');
+xv2 = ncread('../UQ_test/inputdata/domain_lnd_columbia_half_c200831.nc','xv');
+yv2 = ncread('../UQ_test/inputdata/domain_lnd_columbia_half_c200831.nc','yv');
+figure; set(gcf,'Position',[10 10 1400 600]);
+subplot(1,2,1);
+patch(xv,yv,qhex); axis equal; colormap(flowcolor(256));
+caxis([0 3000]);
+subplot(1,2,2);
+patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
+caxis([0 300]);
+cl = colorbar('east');
+cl.Position = cl.Position + [0.07 0 0 0];
+
+subplot(1,2,2);
+patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
+caxis([0 3000]);
+subplot(1,2,2);
+patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
+caxis([0 300]);
+cl = colorbar('east');
+cl.Position = cl.Position + [0.07 0 0 0];
+
+
+figure;
+patch(xv,yv,qhex); axis equal; colormap(flowcolor(256)); hold on;
+%patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
+plot(xc2,yc2,'r.');
+
+figure; set(gcf,'Position',[10 10 1400 600]);
+subplot(1,2,1);
+patch(xv,yv,nanmean(rtot,2)); axis equal;
+caxis([0 100]);
+subplot(1,2,2);
+patch(xv2,yv2,nanmean(rtot2,2)); axis equal;
+caxis([0 100]);
+cl = colorbar('east');
+cl.Position = cl.Position + [0.07 0 0 0];
+
+q1 = qsub+qsur;
+q2 = mosart2.QSUB_LIQ + mosart2.QSUR_LIQ;
+
+q1 = nanmean(q1); q1 = q1(:);
+q2 = nanmean(q2); q2 = q2(:);
+
+figure;
+plot(q1(25:end),'r--','LineWidth',2); hold on;
+plot(q2(1:end-24),'b-','LineWidth',2);
+
+q1 = qsub+qsur;
+q2 = mosart2.QSUB_LIQ + mosart2.QSUR_LIQ;
+
+q1 = nanmean(q1(:,25:end),2);
+q2 = nanmean(q2(:,:,1 : end-24),3);
+
+figure;set(gcf,'Position',[10 10 1400 600]);
+subplot(1,2,1);
+patch(xv,yv,q1); axis equal; colormap(flowcolor(256)); colorbar; caxis([0 120])
+subplot(1,2,2);
+patch(xv2,yv2,q2); axis equal; colormap(flowcolor(256)); colorbar; caxis([0 120])
 
