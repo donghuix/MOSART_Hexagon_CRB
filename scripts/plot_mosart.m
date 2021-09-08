@@ -1,5 +1,8 @@
 clear;close all;clc;
 
+addpath('/Users/xudo627/donghui/CODE/Setup-E3SM-Mac/matlab-scripts-for-mosart/');
+addpath('/Users/xudo627/projects/topotoolbox/colormaps/');
+
 files1 = dir('../output/*Columbia_half_RBSB*.h0*.nc');
 files2 = dir('../output/*Columbia_half_TBSB*.h0*.nc');
 files3 = dir('../output/*Columbia_half_DRT*.h0*.nc');
@@ -12,6 +15,11 @@ area2 = ncread(fname2,'area');
 [mosart1,iout1] = cat_mosart(files1,{'RIVER_DISCHARGE_OVER_LAND_LIQ','RIVER_DISCHARGE_TO_OCEAN_LIQ','QSUR_LIQ','QSUB_LIQ'});
 [mosart2,iout2] = cat_mosart(files2,{'RIVER_DISCHARGE_OVER_LAND_LIQ','RIVER_DISCHARGE_TO_OCEAN_LIQ','QSUR_LIQ','QSUB_LIQ'});
 [mosart3,iout3] = cat_mosart(files3,{'RIVER_DISCHARGE_OVER_LAND_LIQ','RIVER_DISCHARGE_TO_OCEAN_LIQ','QSUR_LIQ','QSUB_LIQ'});
+
+areaTot = ncread(fname2,'areaTotal2');
+iout2 = find(areaTot == max(areaTot));
+areaTot = ncread(fname3,'areaTotal2');
+iout3 = find(areaTot == max(areaTot));
 
 q1(:,:,1) = mosart1.RIVER_DISCHARGE_OVER_LAND_LIQ;
 q1(:,:,2) = mosart1.RIVER_DISCHARGE_TO_OCEAN_LIQ;
@@ -204,66 +212,123 @@ ylabel('Discharge [m^{3}/s]','FontSize',15,'FontWeight','bold');
 
 set(gca,'FontSize',15);
         
-xv  = ncread('../inputdata/domain_lnd_columbia_half_hexagon_case20210322014_c210324.nc','xv');
-yv  = ncread('../inputdata/domain_lnd_columbia_half_hexagon_case20210322014_c210324.nc','yv');
-xv2  = ncread('/Users/xudo627/projects/Columbia_River_Basin/domain_lnd_columbia_river_basin_half_c201016.nc','xv');
-yv2  = ncread('/Users/xudo627/projects/Columbia_River_Basin/domain_lnd_columbia_river_basin_half_c201016.nc','yv');
-xv2 = ncread('../UQ_test/inputdata/domain_lnd_columbia_half_c200831.nc','xv');
-yv2 = ncread('../UQ_test/inputdata/domain_lnd_columbia_half_c200831.nc','yv');
-figure; set(gcf,'Position',[10 10 1400 600]);
-subplot(1,2,1);
-patch(xv,yv,qhex); axis equal; colormap(flowcolor(256));
-caxis([0 3000]);
-subplot(1,2,2);
-patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
-caxis([0 300]);
-cl = colorbar('east');
-cl.Position = cl.Position + [0.07 0 0 0];
+xv   = ncread('../inputdata/domain_lnd_columbia_half_hexagon_RBSB_c210406.nc','xv');
+yv   = ncread('../inputdata/domain_lnd_columbia_half_hexagon_RBSB_c210406.nc','yv');
+xv2  = ncread('../inputdata/domain_lnd_columbia_half_hexagon_TBSB_c210406.nc','xv');
+yv2  = ncread('../inputdata/domain_lnd_columbia_half_hexagon_TBSB_c210406.nc','yv');
+xv3  = ncread('../inputdata/domain_lnd_columbia_half_square_c201016.nc','xv');
+yv3  = ncread('../inputdata/domain_lnd_columbia_half_square_c201016.nc','yv');
+% figure; set(gcf,'Position',[10 10 1400 600]);
+% subplot(1,2,1);
+% patch(xv,yv,qhex); axis equal; colormap(flowcolor(256));
+% caxis([0 3000]);
+% subplot(1,2,2);
+% patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
+% caxis([0 300]);
+% cl = colorbar('east');
+% cl.Position = cl.Position + [0.07 0 0 0];
+% 
+% subplot(1,2,2);
+% patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
+% caxis([0 3000]);
+% subplot(1,2,2);
+% patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
+% caxis([0 300]);
+% cl = colorbar('east');
+% cl.Position = cl.Position + [0.07 0 0 0];
+% 
+% 
+% figure;
+% patch(xv,yv,qhex); axis equal; colormap(flowcolor(256)); hold on;
+% %patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
+% plot(xc2,yc2,'r.');
+% 
+% figure; set(gcf,'Position',[10 10 1400 600]);
+% subplot(1,2,1);
+% patch(xv,yv,nanmean(rtot,2)); axis equal;
+% caxis([0 100]);
+% subplot(1,2,2);
+% patch(xv2,yv2,nanmean(rtot2,2)); axis equal;
+% caxis([0 100]);
+% cl = colorbar('east');
+% cl.Position = cl.Position + [0.07 0 0 0];
+% 
+% q1 = qsub+qsur;
+% q2 = mosart2.QSUB_LIQ + mosart2.QSUR_LIQ;
+% 
+% q1 = nanmean(q1); q1 = q1(:);
+% q2 = nanmean(q2); q2 = q2(:);
+% 
+% figure;
+% plot(q1(25:end),'r--','LineWidth',2); hold on;
+% plot(q2(1:end-24),'b-','LineWidth',2);
+% 
+% q1 = qsub+qsur;
+% q2 = mosart2.QSUB_LIQ + mosart2.QSUR_LIQ;
+% 
+% q1 = nanmean(q1(:,25:end),2);
+% q2 = nanmean(q2(:,:,1 : end-24),3);
+% 
+% figure;set(gcf,'Position',[10 10 1400 600]);
+% subplot(1,2,1);
+% patch(xv,yv,q1); axis equal; colormap(flowcolor(256)); colorbar; caxis([0 120])
+% subplot(1,2,2);
+% patch(xv2,yv2,q2); axis equal; colormap(flowcolor(256)); colorbar; caxis([0 120])
 
-subplot(1,2,2);
-patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
-caxis([0 3000]);
-subplot(1,2,2);
-patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
-caxis([0 300]);
-cl = colorbar('east');
-cl.Position = cl.Position + [0.07 0 0 0];
+load('/Users/xudo627/projects/Conference/2020_ESMD_E3SM_PI_Meeting/Change.mat','lon','lat');
 
+figure(101);
+patch(xv2,yv2,nanmean(q2,2)); axis equal; hold on;
+caxis([0 1000]);
+xlim([-125 -109]);
+ylim([40 54]);
+colormap(flowcolor(256));
+h(1) = scatter(lon(1),lat(1),100,'o','MarkerFaceColor','r','MarkerEdgeColor','none'); 
+%h(2) = scatter(lon(2),lat(2),100,'s','MarkerFaceColor','g','MarkerEdgeColor','none'); 
+h(2) = scatter(xc2(iout2),yc2(iout2),100,'s','MarkerFaceColor','g','MarkerEdgeColor','none'); 
+cb1 = colorbar;
+cb1.FontSize = 13;
+cb1.Label.String = '[m^{3}/2]';
+cb1.Label.FontWeight = 'bold';
+cb1.Label.FontSize = 18;
 
-figure;
-patch(xv,yv,qhex); axis equal; colormap(flowcolor(256)); hold on;
-%patch(xv2,yv2,qsqu); axis equal; colormap(flowcolor(256));
-plot(xc2,yc2,'r.');
+figure(202); set(gcf,'Position',[10 10 1800 400]);
+plot(t_sim,q2(iout2,:),'b-','LineWidth',1.5); hold on; grid on;
+plot(t_sim,q3(iout3,:),'r--','LineWidth',1.5);
+xlim([t_sim(1) t_sim(end)]);
+datetick('x','mmmyy','keeplimits');
+set(gca,'FontSize',13);
+ylabel('Discharge [m^{3}/s]','FontSize',15,'FontWeight','bold');
+leg1 = legend('Hexagon','Lat/lon');
+leg1.FontSize = 15; leg1.FontWeight = 'bold';
 
-figure; set(gcf,'Position',[10 10 1400 600]);
-subplot(1,2,1);
-patch(xv,yv,nanmean(rtot,2)); axis equal;
-caxis([0 100]);
-subplot(1,2,2);
-patch(xv2,yv2,nanmean(rtot2,2)); axis equal;
-caxis([0 100]);
-cl = colorbar('east');
-cl.Position = cl.Position + [0.07 0 0 0];
+[i2, icontributing] = find_mosart_cell(fname2,lon(1),lat(1));
+[i3, icontributing] = find_mosart_cell(fname3,lon(1),lat(1),sum(area2(icontributing)));
 
-q1 = qsub+qsur;
-q2 = mosart2.QSUB_LIQ + mosart2.QSUR_LIQ;
+figure(302); set(gcf,'Position',[10 10 1800 400]);
+plot(t_sim,q2(i2,:),'b-','LineWidth',1.5); hold on; grid on;
+plot(t_sim,q3(i3,:),'r--','LineWidth',1.5);
+xlim([t_sim(1) t_sim(end)]);
+datetick('x','mmmyy','keeplimits');
+set(gca,'FontSize',13);
+ylabel('Discharge [m^{3}/s]','FontSize',15,'FontWeight','bold');
+leg2 = legend('Hexagon','Lat/lon');
+leg2.FontSize = 15; leg2.FontWeight = 'bold';
 
-q1 = nanmean(q1); q1 = q1(:);
-q2 = nanmean(q2); q2 = q2(:);
-
-figure;
-plot(q1(25:end),'r--','LineWidth',2); hold on;
-plot(q2(1:end-24),'b-','LineWidth',2);
-
-q1 = qsub+qsur;
-q2 = mosart2.QSUB_LIQ + mosart2.QSUR_LIQ;
-
-q1 = nanmean(q1(:,25:end),2);
-q2 = nanmean(q2(:,:,1 : end-24),3);
-
-figure;set(gcf,'Position',[10 10 1400 600]);
-subplot(1,2,1);
-patch(xv,yv,q1); axis equal; colormap(flowcolor(256)); colorbar; caxis([0 120])
-subplot(1,2,2);
-patch(xv2,yv2,q2); axis equal; colormap(flowcolor(256)); colorbar; caxis([0 120])
-
+figure(102);
+patch(xv3,yv3,nanmean(q3,2)); axis equal; hold on;
+caxis([0 1000]);
+xlim([-125 -109]);
+ylim([40 54]);
+colormap(flowcolor(256));
+h(1) = scatter(lon(1),lat(1),100,'o','MarkerFaceColor','r','MarkerEdgeColor','none'); 
+%h(2) = scatter(lon(2),lat(2),100,'s','MarkerFaceColor','g','MarkerEdgeColor','none'); 
+h(2) = scatter(xc3(iout3),yc3(iout3),100,'s','MarkerFaceColor','g','MarkerEdgeColor','none'); 
+dist = pdist2([xc3 yc3],[lon(1) lat(1)]);
+[dist,idist] = sort(dist,'ascend');
+scatter(xc3(idist(2)),yc3(idist(2)),100,'^','MarkerFaceColor','m','MarkerEdgeColor','none');
+cb2 = colorbar;
+cb2.FontSize = 13;
+cb2.Label.String = '[m^{3}/2]';
+cb2.Label.FontWeight = 'bold';
+cb2.Label.FontSize = 18;
